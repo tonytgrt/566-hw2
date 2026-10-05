@@ -40,8 +40,22 @@ Every part is adjustable on [Horror Post.mat](Assets/Materials/Full%20Screen/Hor
 In Play mode, press **Space** in the Concept Scene to toggle "DANGER" mode, named after the red status on Resident Evil's health screen. Press it again to return.
 
 - **New post-process effect:** [Danger Post](Assets/Shaders/Danger%20Post.shadergraph) replaces the Survival Horror Finish. A heartbeat (a "lub-dub" at 96 bpm) drives it: on every beat a blood-red watercolor vignette tightens around the characters, chromatic aberration spikes, and the frame flashes faintly red. Everything that isn't already red drains to a cold grey.
-- **Swapped surface materials:** Leon, Grace, and the ground switch to danger versions lit as if by red emergency light, with deep maroon shadows and a strong red rim light. Grace's tremble gets faster and stronger as she panics.
+- **Swapped surface materials:** Leon and Grace switch to danger versions lit as if by red emergency light, with deep maroon shadows and a strong red rim light. Grace's tremble gets faster and stronger as she panics.
 - **Scripts:** [DangerMode.cs](Assets/Scripts/DangerMode.cs) (on the *Danger Mode* object) listens for the key. It switches every [MaterialSwapper](Assets/Scripts/MaterialSwapper.cs) to its danger material and swaps which full-screen feature is active. It puts the renderer features back when Play mode ends, since they're project assets.
+
+## Extra Credit: Police Station Hall
+
+![Leon and Grace in the police station hall](Images/police_hall.jpg)
+
+Leon and Grace now stand in a dim police station lobby, modeled on the main hall of the Raccoon Police Department in *Resident Evil 2* (2019). Only the layout is borrowed; all geometry and textures are my own. All of it uses this project's toon shader, so it gets the same watercolor shadows and sketch outlines as the characters.
+
+- **Turntable camera:** the camera is framed tight on the characters to show off their shaders. In Play mode, its pivot ([Turntable.cs](Assets/Scripts/Turntable.cs) on *Camera Pivot*) circles them at 20° per second, one full turn every 18 seconds. The hall is enclosed on all four sides, so every angle of the turnaround has a background.
+- **Set:** a white marble floor, and behind the characters the stone back wall under the upper balcony, two stone columns holding the balcony up, and the reception desk with a gold crest and two monitors, flanked by brass stanchions with red velvet ropes. Opposite the desk are tall paneled entrance doors in a stone surround, and each side wall has a paneled office door between stone pilasters.
+- **Surfaces:** two seamless textures generated from periodic noise. [Marble Floor.png](Assets/Textures/Hall/Marble%20Floor.png) is a 1.2 m tile of four veined white marble slabs with small dark octagon insets at the corners. [Stone Wall.png](Assets/Textures/Hall/Stone%20Wall.png) is grey-green ashlar in 30 cm courses with mortar joints and mottling. The floor and walls are meshes with UVs in meters, so both textures tile at real-world scale.
+- **Plain floor on purpose:** the floor has no large emblem or busy pattern, so the characters' watercolor cast shadows read clearly against it.
+- **Dim lighting:** the key light is down to 0.6 intensity, and the balcony above the frame shades the back wall. The characters stand out, lit, against dark stone.
+
+The hall is the *Hall* object in the Concept Scene. Its meshes are in `Assets/Models/Hall`, its materials in `Assets/Materials/Toon/Hall`, and its textures in `Assets/Textures/Hall`.
 
 ## Project Overview:
 In this assignment, you will use a 2D concept art piece as inspiration to create a 3D Stylized scene in Unity. This will give you the opportunity to explore stylized graphics techniques alongside non-photo-realistic (NPR) real-time rendering workflows in Unity.

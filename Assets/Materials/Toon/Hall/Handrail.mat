@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Horror Post
-  m_Shader: {fileID: -6465566751694194690, guid: 923fe496da954456e8820a711ad015ad,
+  m_Name: Handrail
+  m_Shader: {fileID: -6465566751694194690, guid: ded73fbf78db746188ee54363aec8150,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,11 +24,11 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _MainTex:
+    - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _WashTexture:
+    - _ShadowTexture:
         m_Texture: {fileID: 2800000, guid: 0368a85d7c1364a2eacac91c70a7a8b8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -46,24 +46,31 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BleedAmount: 0.18
-    - _BleedScale: 1.2
-    - _Desaturate: 0.15
-    - _Flicker: 0.4
-    - _Grain: 0.025
+    - _AlphaClipThreshold: 0
+    - _BandSoftness: 0.06
+    - _BreakupScale: 3
+    - _EdgeBreakup: 0.15
+    - _EdgeDarkening: 0.2
+    - _HatchSpread: 0.06
+    - _HighlightThreshold: 0.75
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _VignetteCenterX: 0.42
-    - _VignetteCenterY: 0.4
-    - _VignetteRadius: 0.75
-    - _VignetteSoftness: 0.35
-    - _VignetteStrength: 0.85
+    - _RimLightBias: 0.6
+    - _RimSize: 0
+    - _RimSoftness: 0
+    - _ShadowEdgeJitter: 0.03
+    - _ShadowScale: 0.5
+    - _ShadowThreshold: 0.3
+    - _SoftShadowRadius: 0.05
+    - _WashStrength: 0.3
     m_Colors:
-    - _HighlightTint: {r: 1, g: 0.9490196, b: 0.8862745, a: 1}
-    - _ShadowTint: {r: 0.29019606, g: 0.41568628, b: 0.5411765, a: 1}
-    - _VignetteColor: {r: 0.35294116, g: 0.38823527, b: 0.43921566, a: 1}
+    - _HatchColor: {r: 0.8392157, g: 0.76862746, b: 0.8, a: 1}
+    - _Highlight: {r: 0.47843137, g: 0.3137255, b: 0.21960784, a: 1}
+    - _Midtone: {r: 0.3529412, g: 0.22745098, b: 0.16470589, a: 1}
+    - _RimColor: {r: 0.47843137, g: 0.3137255, b: 0.21960784, a: 1}
+    - _Shadow: {r: 0.14117648, g: 0.08627451, b: 0.078431375, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &8600334144516352921
+--- !u!114 &542075027975814210
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
