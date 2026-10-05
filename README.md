@@ -1,5 +1,9 @@
 # HW 2: *3D Stylization*
 
+![Concept art: chibi Leon and Grace by @miftasee](Images/re9.jpeg)
+
+*Concept art by [@miftasee](https://x.com/miftasee/status/2029589063402209576).*
+
 ## Credits
 
 - **Concept art:** chibi fan art by [@miftasee](https://x.com/miftasee/status/2029589063402209576) (local copy: [Images/re9.jpeg](Images/re9.jpeg)).
@@ -9,12 +13,17 @@
 
 ![Leon and Grace with watercolor-wash shadows](Images/watercolor_shadows.jpg)
 
-The concept art shades with translucent watercolor washes, not lines: a cool mauve glaze over the faces with soft, hand-painted edges, and feathered blue-grey shadows on the ground. The shadow band of the toon shader works the same way.
+The concept art shades with translucent watercolor washes, not lines: a cool mauve glaze over the faces with soft, hand-painted edges, and blue-grey shadows on the ground that are darkest at the feet and fade out gradually, with no outline. The shadows of the toon shader work the same way.
 
 - **Custom texture:** [Watercolor Wash.png](Assets/Textures/Watercolor%20Wash.png) is a seamless grayscale wash swatch with soft pigment blotches, darker dried edges and paper grain. It was generated from periodic noise, so it tiles without seams. The shader samples it with the mesh UVs × **Shadow Scale** and uses it as pigment density (**Wash Strength**): thin spots let the lit color show through, dense spots go darker.
-- **Wash edge:** the boundary between light and shadow is broken up with noise (**Edge Breakup**, **Breakup Scale**) so it looks hand-painted. The noise uses world position rather than UVs, so the edge stays continuous across UV seams. **Band Softness** sets how soft the edge is.
-- **Pigment pooling:** a slightly darker rim just inside the shadow edge, the way a watercolor wash dries (**Edge Darkening**).
-- **Soft, splashed cast shadows:** the main light's shadow is averaged over a small disc along the receiving surface (**Soft Shadow Radius**), and the disc is nudged by noise (**Shadow Edge Jitter**). Cast shadows get feathered, irregular edges instead of the shadow map's crisp outline.
+- **Wash edge:** where a surface turns away from the light, the boundary between light and shadow is broken up with noise (**Edge Breakup**, **Breakup Scale**) so it looks hand-painted. The noise uses world position rather than UVs, so the edge stays continuous across UV seams. **Band Softness** sets how soft the edge is.
+- **Pigment pooling:** a slightly darker rim just inside that edge, the way a watercolor wash dries (**Edge Darkening**).
+- **Cast shadows that fade out:** a shadow is crisp and dense where it touches its caster, then spreads, softens and thins out as it runs away from it, like the shadows under the characters' feet in the art.
+  - The shader first searches the main light's shadow map around each point to find how far away (along the light) the caster is.
+  - The shadow is then averaged over a disc on the receiving surface whose radius grows with that distance (**Soft Shadow Radius** at contact, plus **Penumbra Growth** per meter), the way contact-hardening soft shadows work.
+  - Its opacity falls off with the same distance and reaches zero at **Shadow Fade Distance**.
+  - The disc is nudged by noise (**Shadow Edge Jitter**), so the shadow's edge comes out irregular.
+  - Cast shadows are laid on as a glaze with continuous opacity, outside the toon bands, so they never snap to a hard edge and get no pigment rim.
 
 ![The Watercolor Wash shadow texture](Assets/Textures/Watercolor%20Wash.png)
 
@@ -53,7 +62,7 @@ Leon and Grace now stand in a dim police station lobby, modeled on the main hall
 - **Set:** a white marble floor, and behind the characters the stone back wall under the upper balcony, two stone columns holding the balcony up, and the reception desk with a gold crest and two monitors, flanked by brass stanchions with red velvet ropes. Opposite the desk are tall paneled entrance doors in a stone surround, and each side wall has a paneled office door between stone pilasters.
 - **Surfaces:** two seamless textures generated from periodic noise. [Marble Floor.png](Assets/Textures/Hall/Marble%20Floor.png) is a 1.2 m tile of four veined white marble slabs with small dark octagon insets at the corners. [Stone Wall.png](Assets/Textures/Hall/Stone%20Wall.png) is grey-green ashlar in 30 cm courses with mortar joints and mottling. The floor and walls are meshes with UVs in meters, so both textures tile at real-world scale.
 - **Plain floor on purpose:** the floor has no large emblem or busy pattern, so the characters' watercolor cast shadows read clearly against it.
-- **Dim lighting:** the key light is down to 0.6 intensity, and the balcony above the frame shades the back wall. The characters stand out, lit, against dark stone.
+- **Dim lighting:** the key light is down to 0.6 intensity, and the balcony above the frame shades the back wall. The wall's material has a longer **Shadow Fade Distance**, so that shadow stays even though the balcony is a few meters away. The characters stand out, lit, against dark stone.
 
 The hall is the *Hall* object in the Concept Scene. Its meshes are in `Assets/Models/Hall`, its materials in `Assets/Materials/Toon/Hall`, and its textures in `Assets/Textures/Hall`.
 

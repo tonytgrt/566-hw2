@@ -53,12 +53,14 @@ Material:
     - _EdgeDarkening: 0.18
     - _HatchSpread: 0.08
     - _HighlightThreshold: 0.75
+    - _PenumbraGrowth: 0.05
     - _QueueControl: 0
     - _QueueOffset: 0
     - _RimLightBias: 0.1
     - _RimSize: 0.45
     - _RimSoftness: 0.03
     - _ShadowEdgeJitter: 0.008
+    - _ShadowFadeDistance: 3.5
     - _ShadowScale: 4
     - _ShadowThreshold: 0.3
     - _SoftShadowRadius: 0.015

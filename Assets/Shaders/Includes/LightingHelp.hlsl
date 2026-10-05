@@ -109,14 +109,41 @@ float WashFbm3(float3 p)
     return 0.57 * WashNoise3(p) + 0.29 * WashNoise3(p * 2.07 + 17.1) + 0.14 * WashNoise3(p * 4.13 + 5.3);
 }
 
-// Watercolour cast shadows. URP's shadow map has a crisp edge, so shading alone can only alter a pixel-thin border.
-// Instead the main light's shadow is averaged over a disc in the surface's tangent plane (Soft Radius, metres), which
-// feathers the edge like a wet wash, and the disc's centre is pushed around by world-space noise (Edge Jitter,
-// metres), so shadow outlines come out irregular. The disc lies along the surface (not across the light) so its
-// samples never dip below a receiver that also casts shadows, which would make it shadow itself. 12 taps on a
-// golden-angle spiral.
+#ifndef SHADERGRAPH_PREVIEW
+// Distance in metres along the main light from positionWS to the caster in front of it in the shadow map (<= 0 when
+// nothing is in front). Reads the raw shadow-map depth; the directional light's projection is orthographic, so a
+// depth difference converts to metres by the length of the cascade's world-to-shadow z row.
+float ShadowCasterDistance(float3 positionWS)
+{
+#if defined(_MAIN_LIGHT_SHADOWS_CASCADE)
+    half cascadeIndex = ComputeCascadeIndex(positionWS);
+#else
+    half cascadeIndex = 0;
+#endif
+    float4x4 worldToShadow = _MainLightWorldToShadow[cascadeIndex];
+    float depthPerMetre = length(worldToShadow[2].xyz);
+    if (depthPerMetre < 1e-6) return 0;                         // beyond the last cascade
+    float3 coord = mul(worldToShadow, float4(positionWS, 1.0)).xyz;
+    float caster = SAMPLE_TEXTURE2D_LOD(_MainLightShadowmapTexture, sampler_PointClamp, coord.xy, 0).r;
+#if UNITY_REVERSED_Z
+    return (caster - coord.z) / depthPerMetre;
+#else
+    return (coord.z - caster) / depthPerMetre;
+#endif
+}
+#endif
+
+// Watercolour cast shadows, after the concept art: a translucent wash that is darkest where it touches the caster,
+// spreads and softens as it runs away from it, and fades out with no hard outline.
+// 1. Caster search: 12 taps over a disc find how far, along the light, this point is from the casters shadowing it.
+// 2. Penumbra: the main light's shadow is averaged over a disc of Soft Radius + distance x Penumbra Growth (metres),
+//    so the shadow is crisp at the feet and feathers out toward its far end (like contact-hardening soft shadows).
+// 3. Fade: the shadow thins out with the same distance and is gone at Fade Distance.
+// Both discs lie in the surface's tangent plane, so samples never dip below a receiver that also casts shadows (which
+// would make it shadow itself). Their centre is pushed around by world-space noise (Edge Jitter, metres), so the
+// outline comes out irregular.
 void WatercolorShadow_float(float3 WorldPos, float3 WorldNormal, float SoftRadius, float EdgeJitter,
-                            out float ShadowAtten)
+                            float PenumbraGrowth, float FadeDistance, out float ShadowAtten)
 {
 #ifdef SHADERGRAPH_PREVIEW
     ShadowAtten = 1;
@@ -127,16 +154,44 @@ void WatercolorShadow_float(float3 WorldPos, float3 WorldNormal, float SoftRadiu
     float3 p = WorldPos * 6.0;
     float2 jitter = float2(WashFbm3(p), WashFbm3(p + 31.7)) * 2 - 1;
     float3 centre = WorldPos + n * (0.25 * SoftRadius + 0.002) + (t1 * jitter.x + t2 * jitter.y) * EdgeJitter;
+    FadeDistance = max(FadeDistance, 1e-3);
 
-    const int taps = 12;
-    float sum = 0;
-    for (int i = 0; i < taps; i++)
+    const int searchTaps = 12;
+    float searchRadius = SoftRadius + FadeDistance * PenumbraGrowth;
+    float distanceSum = 0;
+    float casters = 0;
+    for (int i = 0; i < searchTaps; i++)
     {
-        float r = SoftRadius * sqrt((i + 0.5) / taps);
+        float r = searchRadius * sqrt((i + 0.5) / searchTaps);
         float a = i * 2.39996323;
-        sum += MainLightRealtimeShadow(TransformWorldToShadowCoord(centre + (t1 * cos(a) + t2 * sin(a)) * r));
+        float d = ShadowCasterDistance(centre + (t1 * cos(a) + t2 * sin(a)) * r);
+        if (d > 0.01)
+        {
+            distanceSum += d;
+            casters += 1;
+        }
     }
-    ShadowAtten = sum / taps;
+    if (casters == 0)
+    {
+        ShadowAtten = 1;
+        return;
+    }
+    float distance = distanceSum / casters;
+
+    const int taps = 16;
+    float radius = SoftRadius + distance * PenumbraGrowth;
+    float lit = 0;
+    for (int j = 0; j < taps; j++)
+    {
+        float r = radius * sqrt((j + 0.5) / taps);
+        float a = j * 2.39996323 + 1.3;
+        lit += MainLightRealtimeShadow(TransformWorldToShadowCoord(centre + (t1 * cos(a) + t2 * sin(a)) * r));
+    }
+    lit /= taps;
+
+    float core = smoothstep(0, 0.6, 1 - lit);                   // the middle of the shadow reaches full strength
+    float opacity = 1 - smoothstep(0, FadeDistance, distance);
+    ShadowAtten = 1 - core * opacity;
 #endif
 }
 
@@ -148,9 +203,11 @@ void WatercolorShadow_float(float3 WorldPos, float3 WorldNormal, float SoftRadiu
 //   texture, sampled with mesh UV x Shadow Scale (darker = more pigment) at Wash Strength: thin spots let the lit
 //   colour show through, dense spots go darker.
 // - Edge Darkening: pigment pools into a slightly darker rim just inside the wash edge, the way a wash dries.
+// - Cast shadows (CastShadow, from WatercolorShadow) skip the bands: they are laid on as the same glaze with
+//   continuous opacity, so they keep their gradual fade and get no hard edge or darkened rim.
 // Base Map (white by default) multiplies all three tones, so for textured models the tones act as tints. BaseTint is
 // the textured midtone (to tint the additional lights); Alpha is the Base Map's alpha (for the graph's alpha clip).
-void ChooseColor_float(float3 Highlight, float3 Midtone, float3 Shadow, float Diffuse,
+void ChooseColor_float(float3 Highlight, float3 Midtone, float3 Shadow, float Diffuse, float CastShadow,
                        float ShadowThreshold, float HighlightThreshold, float Softness,
                        float2 ShadowUV, UnityTexture2D ShadowTexture, float WashStrength,
                        float3 WorldPos, float EdgeBreakup, float BreakupScale, float EdgeDarkening,
@@ -170,9 +227,10 @@ void ChooseColor_float(float3 Highlight, float3 Midtone, float3 Shadow, float Di
     float depth = ShadowThreshold - (Diffuse + breakup);           // > 0 inside the wash
     float wash = smoothstep(-s, s, depth);
     float rim = wash * (1 - smoothstep(s, s + 0.15, depth));
+    float glaze = 1 - (1 - wash) * saturate(CastShadow);
 
     float pigment = (0.5 - SAMPLE_TEXTURE2D(ShadowTexture.tex, ShadowTexture.samplerstate, ShadowUV).r) * 2;
-    float coverage = saturate(wash * (1 + min(pigment, 0) * WashStrength));
+    float coverage = saturate(glaze * (1 + min(pigment, 0) * WashStrength));
     float3 washColor = Shadow * (1 - EdgeDarkening * rim) * (1 - max(pigment, 0) * WashStrength * 0.35);
 
     float aboveMidtone = smoothstep(HighlightThreshold - s, HighlightThreshold + s, Diffuse + breakup * 0.5);
