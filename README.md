@@ -4,6 +4,12 @@
 
 *Concept art by [@miftasee](https://x.com/miftasee/status/2029589063402209576).*
 
+## Turnaround
+
+[![Turnaround of the Concept Scene](Images/turntable.webp)](Images/turntable.mp4)
+
+The Concept Scene in Play mode: the turntable camera circles Leon and Grace once every 18 seconds. The preview above loops; click it for the full-resolution video ([turntable.mp4](Images/turntable.mp4)).
+
 ## Credits
 
 - **Concept art:** chibi fan art by [@miftasee](https://x.com/miftasee/status/2029589063402209576) (local copy: [Images/re9.jpeg](Images/re9.jpeg)).
@@ -31,7 +37,7 @@ The code is in [LightingHelp.hlsl](Assets/Shaders/Includes/LightingHelp.hlsl) (`
 
 ## Post Process: Survival Horror Finish
 
-![The scene with the survival horror post process](Images/horror_post.jpg)
+![The scene without (left) and with (right) the Survival Horror Finish](Images/horror_post.jpg)
 
 A full-screen pass gives the scene a Resident Evil mood while staying in the concept art's watercolor style. It runs after the outline pass, so the lines are graded too.
 
