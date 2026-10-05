@@ -36,7 +36,8 @@ MonoBehaviour:
   - {fileID: 2330853690371268990}
   - {fileID: -3899005159062888763}
   - {fileID: 1442906100219390664}
-  m_RendererFeatureMap: 7ee1fcfd14db5820c51ea43477f3e3c9c82ad20b743b0614
+  - {fileID: 2044866875188351082}
+  m_RendererFeatureMap: 7ee1fcfd14db5820c51ea43477f3e3c9c82ad20b743b06146a9090bc96d3601c
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 0}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -101,6 +102,22 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     material: {fileID: 2100000, guid: 242904bd70f1742a4b7916bd5206d2ee, type: 2}
+--- !u!114 &2044866875188351082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8faec35144280c146ac2395f7d7187de, type: 3}
+  m_Name: Danger Post
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  settings:
+    renderPassEvent: 550
+    material: {fileID: 2100000, guid: 61e3b01995a324c339416995d3cc1a83, type: 2}
 --- !u!114 &2330853690371268990
 MonoBehaviour:
   m_ObjectHideFlags: 0

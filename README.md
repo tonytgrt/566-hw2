@@ -33,6 +33,16 @@ A full-screen pass gives the scene a Resident Evil mood while staying in the con
 
 Every part is adjustable on [Horror Post.mat](Assets/Materials/Full%20Screen/Horror%20Post.mat): vignette color, center, radius, softness and strength, bleed amount and scale, flicker, shadow and highlight tints, desaturation, and grain. The shader is [Horror Post.shadergraph](Assets/Shaders/Horror%20Post.shadergraph), with the code in [PostProcessHelp.hlsl](Assets/Shaders/Includes/PostProcessHelp.hlsl). It runs through a second Full Screen Feature on the URP renderer, set to Before Rendering Post Processing.
 
+## Interactivity: Danger Mode
+
+![Calm (left) and Danger mode (right)](Images/danger_mode.jpg)
+
+In Play mode, press **Space** in the Concept Scene to toggle "DANGER" mode, named after the red status on Resident Evil's health screen. Press it again to return.
+
+- **New post-process effect:** [Danger Post](Assets/Shaders/Danger%20Post.shadergraph) replaces the Survival Horror Finish. A heartbeat (a "lub-dub" at 96 bpm) drives it: on every beat a blood-red watercolor vignette tightens around the characters, chromatic aberration spikes, and the frame flashes faintly red. Everything that isn't already red drains to a cold grey.
+- **Swapped surface materials:** Leon, Grace, and the ground switch to danger versions lit as if by red emergency light, with deep maroon shadows and a strong red rim light. Grace's tremble gets faster and stronger as she panics.
+- **Scripts:** [DangerMode.cs](Assets/Scripts/DangerMode.cs) (on the *Danger Mode* object) listens for the key. It switches every [MaterialSwapper](Assets/Scripts/MaterialSwapper.cs) to its danger material and swaps which full-screen feature is active. It puts the renderer features back when Play mode ends, since they're project assets.
+
 ## Project Overview:
 In this assignment, you will use a 2D concept art piece as inspiration to create a 3D Stylized scene in Unity. This will give you the opportunity to explore stylized graphics techniques alongside non-photo-realistic (NPR) real-time rendering workflows in Unity.
 
