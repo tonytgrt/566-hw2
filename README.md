@@ -20,6 +20,19 @@ The concept art shades with translucent watercolor washes, not lines: a cool mau
 
 The code is in [LightingHelp.hlsl](Assets/Shaders/Includes/LightingHelp.hlsl) (`WatercolorShadow` and `ChooseColor`), used by both the Toon Shader and Toon Tremble Shader graphs.
 
+## Post Process: Survival Horror Finish
+
+![The scene with the survival horror post process](Images/horror_post.jpg)
+
+A full-screen pass gives the scene a Resident Evil mood while staying in the concept art's watercolor style. It runs after the outline pass, so the lines are graded too.
+
+- **Closing-in vignette:** the art's backdrop darkens toward the top-right, so the frame is closed in by an off-center slate vignette. Its edge bleeds in like a watercolor wash (the same Watercolor Wash texture, drifting slowly across the screen) instead of a smooth digital gradient.
+- **Failing flashlight:** the vignette slowly breathes and now and then flickers inward, like an unsteady light.
+- **Color grade:** slightly desaturated, with cool slate lifted into the darks and a warm tint toward the highlights, the same cold/warm contrast the concept art uses.
+- **Film grain:** fine monochrome grain, strongest in the darks, re-rolled every frame.
+
+Every part is adjustable on [Horror Post.mat](Assets/Materials/Full%20Screen/Horror%20Post.mat): vignette color, center, radius, softness and strength, bleed amount and scale, flicker, shadow and highlight tints, desaturation, and grain. The shader is [Horror Post.shadergraph](Assets/Shaders/Horror%20Post.shadergraph), with the code in [PostProcessHelp.hlsl](Assets/Shaders/Includes/PostProcessHelp.hlsl). It runs through a second Full Screen Feature on the URP renderer, set to Before Rendering Post Processing.
+
 ## Project Overview:
 In this assignment, you will use a 2D concept art piece as inspiration to create a 3D Stylized scene in Unity. This will give you the opportunity to explore stylized graphics techniques alongside non-photo-realistic (NPR) real-time rendering workflows in Unity.
 
