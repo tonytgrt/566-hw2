@@ -12,7 +12,8 @@ public class FullScreenFeature : ScriptableRendererFeature
         public Material material;
     }
 
-    [SerializeField] private FullScreenPassSettings settings;
+    // Initialised so a freshly added feature doesn't hit a null in Create() before Unity deserialises it.
+    [SerializeField] private FullScreenPassSettings settings = new FullScreenPassSettings();
     class FullScreenPass : ScriptableRenderPass
     {
         const string ProfilerTag = "Full Screen Pass";
@@ -35,6 +36,9 @@ public class FullScreenFeature : ScriptableRendererFeature
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             RenderTextureDescriptor descriptor = renderingData.cameraData.cameraTargetDescriptor;
+            // The temporary copy needs neither MSAA nor its own depth buffer.
+            descriptor.msaaSamples = 1;
+            descriptor.depthBufferBits = 0;
             colorBuffer = renderingData.cameraData.renderer.cameraColorTarget;
 
             cmd.GetTemporaryRT(temporaryBufferID, descriptor, FilterMode.Point);
@@ -50,8 +54,10 @@ public class FullScreenFeature : ScriptableRendererFeature
             CommandBuffer cmd = CommandBufferPool.Get();
             using (new ProfilingScope(cmd, new ProfilingSampler(ProfilerTag)))
             {
-                // HW 4 Hint: Blit from the color buffer to a temporary buffer and *back*.
+                // A blit can't read and write the same texture, so run the material from the camera color into a
+                // temporary buffer, then copy the result back into the camera color (the missing second blit).
                 Blit(cmd, colorBuffer, temporaryBuffer, settings.material);
+                Blit(cmd, temporaryBuffer, colorBuffer);
             }
 
             // Execute the command buffer and release it.

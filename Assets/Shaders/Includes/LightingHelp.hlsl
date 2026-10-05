@@ -85,11 +85,23 @@ void ComputeAdditionalLighting_float(float3 WorldPosition, float3 WorldNormal,
 // Puzzle 3 sampled by screen position). The texture is white paper with dark pen strokes: inside the shadow band the
 // strokes are drawn in Shadow * HatchColor. HatchSpread treats stroke pixels as a little darker than they are, so near
 // the terminator strokes poke out of the shadow into the midtone and fray the edge like hand-drawn hatching.
+// Base Map (white by default) multiplies all three tones, so for textured models the tones act as tints: e.g. a warm
+// white highlight, a neutral midtone and a cool lavender shadow. BaseTint is the textured midtone, used to tint the
+// additional lights. Alpha is the Base Map's alpha, for the graph's alpha clip (cut-out decals such as a mouth).
 void ChooseColor_float(float3 Highlight, float3 Midtone, float3 Shadow, float Diffuse,
                        float ShadowThreshold, float HighlightThreshold, float Softness,
                        float2 ShadowUV, UnityTexture2D ShadowTexture, float3 HatchColor, float HatchSpread,
-                       out float3 OUT)
+                       float2 BaseUV, UnityTexture2D BaseMap,
+                       out float3 OUT, out float3 BaseTint, out float Alpha)
 {
+    float4 baseSample = SAMPLE_TEXTURE2D(BaseMap.tex, BaseMap.samplerstate, BaseUV);
+    float3 albedo = baseSample.rgb;
+    Alpha = baseSample.a;
+    Highlight *= albedo;
+    Midtone *= albedo;
+    Shadow *= albedo;
+    BaseTint = Midtone;
+
     float ink = 1 - SAMPLE_TEXTURE2D(ShadowTexture.tex, ShadowTexture.samplerstate, ShadowUV).r;
     float3 hatchedShadow = lerp(Shadow, Shadow * HatchColor, ink);
 

@@ -1,5 +1,12 @@
 # HW 2: *3D Stylization*
 
+## Credits
+
+- **Concept art:** chibi fan art by [@miftasee](https://x.com/miftasee/status/2029589063402209576) (local copy: [Images/re9.jpeg](Images/re9.jpeg)).
+- **3D models**, both licensed under [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/). Changes: rescaled and re-oriented, the models' built-in outline shells and Azusa's halo hidden, hair recolored, and re-shaded with this project's toon shaders.
+  - ["[Blue Archive] -Azusa- | Chibi (Default emotion)"](https://skfb.ly/pEV8r) by VuckyZ
+  - ["Dante ChiBi"](https://skfb.ly/6nKxN) by hoamomcho_qd
+
 ## Project Overview:
 In this assignment, you will use a 2D concept art piece as inspiration to create a 3D Stylized scene in Unity. This will give you the opportunity to explore stylized graphics techniques alongside non-photo-realistic (NPR) real-time rendering workflows in Unity.
 
