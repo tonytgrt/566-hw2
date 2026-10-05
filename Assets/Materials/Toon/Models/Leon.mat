@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Leon
+  m_Shader: {fileID: -6465566751694194690, guid: ded73fbf78db746188ee54363aec8150,
+    type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: ace24a1d2e0964095a04ae5a72362003, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadowTexture:
+        m_Texture: {fileID: 2800000, guid: 0368a85d7c1364a2eacac91c70a7a8b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaClipThreshold: 0
+    - _BandSoftness: 0.08
+    - _BreakupScale: 9
+    - _EdgeBreakup: 0.18
+    - _EdgeDarkening: 0.18
+    - _HatchSpread: 0.06
+    - _HighlightThreshold: 0.75
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _RimLightBias: 0.6
+    - _RimSize: 0.25
+    - _RimSoftness: 0.03
+    - _ShadowEdgeJitter: 0.008
+    - _ShadowScale: 4
+    - _ShadowThreshold: 0.3
+    - _SoftShadowRadius: 0.015
+    - _WashStrength: 0.3
+    m_Colors:
+    - _HatchColor: {r: 0.8392157, g: 0.76862746, b: 0.8, a: 1}
+    - _Highlight: {r: 1, g: 0.9647059, b: 0.93333334, a: 1}
+    - _Midtone: {r: 0.93333334, g: 0.9019608, b: 0.9019608, a: 1}
+    - _RimColor: {r: 1, g: 0.8117647, b: 0.70980394, a: 1}
+    - _Shadow: {r: 0.76862746, g: 0.7372549, b: 0.8156863, a: 1}
+  m_BuildTextureStacks: []
+--- !u!114 &6164570867781657243
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

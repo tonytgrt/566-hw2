@@ -24,8 +24,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowTexture:
-        m_Texture: {fileID: 2800000, guid: 3e925d608b1614fd296b0b7377c21b48, type: 3}
+        m_Texture: {fileID: 2800000, guid: 0368a85d7c1364a2eacac91c70a7a8b8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -42,9 +46,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BandSoftness: 0.03
+    - _AlphaClipThreshold: 0
+    - _BandSoftness: 0.08
     - _BoilAmount: 0.012
     - _BoilScale: 5
+    - _BreakupScale: 9
+    - _EdgeBreakup: 0.18
+    - _EdgeDarkening: 0.18
     - _HatchSpread: 0.08
     - _HighlightThreshold: 0.75
     - _QueueControl: 0
@@ -52,10 +60,13 @@ Material:
     - _RimLightBias: 0.1
     - _RimSize: 0.45
     - _RimSoftness: 0.03
+    - _ShadowEdgeJitter: 0.008
     - _ShadowScale: 3
     - _ShadowThreshold: 0.3
     - _ShakeAmount: 0.015
+    - _SoftShadowRadius: 0.015
     - _TrembleRate: 8
+    - _WashStrength: 0.3
     m_Colors:
     - _HatchColor: {r: 0.81960785, g: 0.7019608, b: 0.72156864, a: 1}
     - _Highlight: {r: 0.9647059, g: 0.8627451, b: 0.7529412, a: 1}

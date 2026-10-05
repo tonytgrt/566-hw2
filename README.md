@@ -3,9 +3,22 @@
 ## Credits
 
 - **Concept art:** chibi fan art by [@miftasee](https://x.com/miftasee/status/2029589063402209576) (local copy: [Images/re9.jpeg](Images/re9.jpeg)).
-- **3D models**, both licensed under [Creative Commons Attribution 4.0](http://creativecommons.org/licenses/by/4.0/). Changes: rescaled and re-oriented, the models' built-in outline shells and Azusa's halo hidden, hair recolored, and re-shaded with this project's toon shaders.
-  - ["[Blue Archive] -Azusa- | Chibi (Default emotion)"](https://skfb.ly/pEV8r) by VuckyZ
-  - ["Dante ChiBi"](https://skfb.ly/6nKxN) by hoamomcho_qd
+- **Leon and Grace models** (Concept Scene): generated with [Tripo](https://www.tripo3d.ai) image-to-3D from cut-outs of the concept art ([Images/leon_ref.png](Images/leon_ref.png), [Images/grace_ref.png](Images/grace_ref.png)), then rescaled, posed, and re-shaded with this project's toon shaders.
+
+## Interesting Shadow: Watercolor Wash
+
+![Leon and Grace with watercolor-wash shadows](Images/watercolor_shadows.jpg)
+
+The concept art shades with translucent watercolor washes, not lines: a cool mauve glaze over the faces with soft, hand-painted edges, and feathered blue-grey shadows on the ground. The shadow band of the toon shader works the same way.
+
+- **Custom texture:** [Watercolor Wash.png](Assets/Textures/Watercolor%20Wash.png) is a seamless grayscale wash swatch with soft pigment blotches, darker dried edges and paper grain. It was generated from periodic noise, so it tiles without seams. The shader samples it with the mesh UVs × **Shadow Scale** and uses it as pigment density (**Wash Strength**): thin spots let the lit color show through, dense spots go darker.
+- **Wash edge:** the boundary between light and shadow is broken up with noise (**Edge Breakup**, **Breakup Scale**) so it looks hand-painted. The noise uses world position rather than UVs, so the edge stays continuous across UV seams. **Band Softness** sets how soft the edge is.
+- **Pigment pooling:** a slightly darker rim just inside the shadow edge, the way a watercolor wash dries (**Edge Darkening**).
+- **Soft, splashed cast shadows:** the main light's shadow is averaged over a small disc along the receiving surface (**Soft Shadow Radius**), and the disc is nudged by noise (**Shadow Edge Jitter**). Cast shadows get feathered, irregular edges instead of the shadow map's crisp outline.
+
+![The Watercolor Wash shadow texture](Assets/Textures/Watercolor%20Wash.png)
+
+The code is in [LightingHelp.hlsl](Assets/Shaders/Includes/LightingHelp.hlsl) (`WatercolorShadow` and `ChooseColor`), used by both the Toon Shader and Toon Tremble Shader graphs.
 
 ## Project Overview:
 In this assignment, you will use a 2D concept art piece as inspiration to create a 3D Stylized scene in Unity. This will give you the opportunity to explore stylized graphics techniques alongside non-photo-realistic (NPR) real-time rendering workflows in Unity.
